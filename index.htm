@@ -4,6 +4,8 @@
   <title>qqTimer</title>
   <script type="text/javascript" src="scramble_333_edit.js"></script>
   <script type="text/javascript" src="scramble_sq1.js"></script>
+  <link rel="stylesheet" type="text/css" href="colorBoard.css">
+  <script type="text/javascript" src="color.js"></script>
   <script type="text/javascript">
 <!--
 
@@ -2088,12 +2090,12 @@ function megascramble(turns, suffixes){
            <span onclick="setCookie(&#39;style&#39;,1);window.location.reload();" class="a">Tamanas</span>
    </td><td align="right">
     monospace scrambles are <span id="monospace" onclick="toggleMono()" class="a">off</span><br>
-    top bar color: #<input id="tcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
-    background color: #<input id="bcol" value="white" size="6" maxlength="6" onchange="changeColor()"><br>
-    text color: #<input id="fcol" value="black" size="6" maxlength="6" onchange="changeColor()"><br>
-    link color: #<input id="lcol" value="blue" size="6" maxlength="6" onchange="changeColor()"><br>
-    highlight color: #<input id="hcol" value="yellow" size="6" maxlength="6" onchange="changeColor()"><br>
-    memorization colour: #<input id="memcol" value="green" size="6" maxlength="6" onchange="changeColor()"><br>
+    <span id="tcolspan" onClick="colorSelect(event, $('tcol'))" class="a">top bar color</span> : #<input id="tcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
+    <span id="bcolspan" onClick="colorSelect(event, $('bcol'))" class="a">background color</span> : #<input id="bcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
+    <span id="fcolspan" onClick="colorSelect(event, $('fcol'))" class="a">text color</span> : #<input id="fcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
+    <span id="lcolspan" onClick="colorSelect(event, $('lcol'))" class="a">link color</span> : #<input id="lcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
+    <span id="hcolspan" onClick="colorSelect(event, $('hcol'))" class="a">highlight color</span> : #<input id="hcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
+    <span id="memcolspan" onClick="colorSelect(event, $('memcol'))" class="a">memorization colour</span> : #<input id="memcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
     <span class="a" onclick="resetColors()">reset</span> colors to default<br>
    </td></tr></tbody></table>
   </td></tr>
