@@ -194,26 +194,22 @@ function startTimer(keyCode) {
   if (inspection == 1) {
    timerStatus = 2;
    inspectionTime = new Date();
-   $('theTime').style.color = "red";
    inspectionID = setInterval(updateInspec, (timerupdate==1)?10:100);
   } else if (useBld == 1) {
    timerStatus = 4;
    memoTime = new Date();
-   $('theTime').style.color = $('memcol').value;
    if (timerupdate > 0) {memoID = setInterval(updateMemo, (timerupdate==1)?10:100);}
    else {$('theTime').innerHTML = "memorizing";}
   } else {
    timerStatus = 1;
    startTime = new Date();
    penalty = 0;
-   $('theTime').style.color = $('fcol').value;
    if (timerupdate > 0) {timerID = setInterval(updateTimer, (timerupdate==1)?10:100);}
    else {$('theTime').innerHTML = "running";}
   }
  } else if (timerStatus == 4 && keyCode == 32) {
   timerStatus = 1;
   startTime = new Date();
-  $('theTime').style.color = $('fcol').value;
   var memoLength = startTime.getTime() - memoTime.getTime();
   if (timerupdate > 0) {
    clearInterval(memoID);
@@ -223,7 +219,6 @@ function startTimer(keyCode) {
  } else if (timerStatus == 2 && keyCode == 32) {
   timerStatus = 1;
   startTime = new Date();
-  $('theTime').style.color = $('fcol').value;
   var inspecLength = startTime.getTime() - inspectionTime.getTime();
   penalty = (inspecLength < 15000) ? 0 : (inspecLength < 17000) ? 2 : 1;
   clearInterval(inspectionID);
@@ -231,6 +226,13 @@ function startTimer(keyCode) {
    timerID = setInterval(updateTimer, (timerupdate==1)?10:100);
   }
   else {$('theTime').innerHTML = "running";}
+ }
+ if (timerStatus == 4) {
+  $('theTime').style.color = $('memcol').value;  
+ } else if (timerStatus == 2) {
+  $('theTime').style.color = "red";
+ } else {
+  $('theTime').style.color = $('fcol').value;
  }
 }
 
@@ -266,6 +268,10 @@ function stopTimer(keyCode) {
 }
 
 function checkKey(keyCode) {
+ if (timerStatus == 1 || timerStatus == 0 || timerStatus == 3 && (new Date()).getTime()-curTime.getTime()<300) 
+  $('theTime').style.color = "red"
+ else if(keyCode == 32)
+  $('theTime').style.color = "#00dd00";
  if (keyCode == 13 || manualEnter == 0) stopTimer(keyCode);
 }
 
@@ -2061,10 +2067,10 @@ function megascramble(turns, suffixes){
     that time was: <span onclick="changeNotes(0);" class="a">no penalty</span> <span onclick="changeNotes(2);" class="a">+2</span> <span onclick="changeNotes(1);" class="a">DNF</span> | <span onclick="comment();" class="a">leave comment</span>
    </td>
    <td style="width: 15em;">
-    <div id="theList" style="overflow-y: scroll; height: 16em;"></div>
+    <div id="theList" style="overflow-y: auto; height: 16em;"></div>
    </td>
    <td style="width: 15em;">
-    <div id="stats" style="overflow-y: scroll; height: 16em;"></div>
+    <div id="stats" style="overflow-y: auto; height: 16em;"></div>
    </td>
   </tr>
   <tr id="options" style="display: none;"><td colspan="3">
