@@ -1680,15 +1680,19 @@ function drawSquare(r, cx, cy, w, fillColor) {
   var rn = function(n) {
    return Math.floor(randomSource.random() * n);
   }
-
+  
   var getRandomScramble = function() {
-    var cperm, eperm;
+    var cperm, eperm = rn(479001600);
     do {
-      eperm = rn(479001600);
       cperm = rn(40320);
     } while ((get8Parity(cperm) ^ get12Parity(eperm)) != 0);
     var posit = toFaceCube(new CubieCube_2(cperm, rn(2187), eperm, rn(2048)));
-    return $solution(search, posit);
+    var solution = $solution(search, posit);
+
+    return {
+      state: posit,
+      scramble_string: solution
+    };
   }
 
   var getEdgeScramble = function() {
@@ -1697,7 +1701,12 @@ function drawSquare(r, cx, cy, w, fillColor) {
       eperm = rn(479001600);
     } while ((get8Parity(0) ^ get12Parity(eperm)) != 0);
     var posit = toFaceCube(new CubieCube_2(0, 0, eperm, rn(2048)));
-    return $solution(search, posit);
+    var solution = $solution(search, posit);
+
+    return {
+      state: posit,
+      scramble_string: solution
+    };
   }
 
   var getCornerScramble = function() {
@@ -1706,7 +1715,12 @@ function drawSquare(r, cx, cy, w, fillColor) {
       cperm = rn(40320);
     } while ((get8Parity(cperm) ^ get12Parity(0)) != 0);
     var posit = toFaceCube(new CubieCube_2(cperm, rn(2187), 0, 0));
-    return $solution(search, posit);
+    var solution = $solution(search, posit);
+
+    return {
+      state: posit,
+      scramble_string: solution
+    };
   }
 
   var getLLScramble = function() {
@@ -1736,7 +1750,12 @@ function drawSquare(r, cx, cy, w, fillColor) {
       }
     } while (esum%2 != 0);
     var posit = toFaceCube(new CubieCube_2(cperm, cori, eperm, eori));
-    return $solution(search, posit);
+    var solution = $solution(search, posit);
+
+    return {
+      state: posit,
+      scramble_string: solution
+    };
   }
 
   var getLSLLScramble = function() {
@@ -1791,7 +1810,12 @@ function drawSquare(r, cx, cy, w, fillColor) {
       }
     } while (esum%2 != 0);
     var posit = toFaceCube(new CubieCube_2(cperm, cori, eperm, eori));
-    return $solution(search, posit);
+    var solution = $solution(search, posit);
+
+    return {
+      state: posit,
+      scramble_string: solution
+    };
   }
 
   return {

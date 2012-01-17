@@ -2,6 +2,7 @@
  <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>qqTimer</title>
+  <script type="text/javascript" src="mersennetwister.js"></script>
   <script type="text/javascript" src="scramble_333_edit.js"></script>
   <script type="text/javascript" src="scramble_sq1.js"></script>
   <link rel="stylesheet" type="text/css" href="colorBoard.css">
@@ -31,7 +32,7 @@ var sessionID=0;
 var initoncesq1 = 1;
 
 function $(str){return document.getElementById(str);}
-
+Math.random = new MersenneTwisterObject(new Date().getTime()).random;
 
 // #################### TIMER STUFF ####################
 
@@ -1257,7 +1258,7 @@ function scrambleIt(){
   megascramble([["U","D"],["R","L"],["F","B"]],cubesuff);
  }
  else if(type=="333"){		        // 3x3x3 (random state)
-  ss[0]=scramblers["333"].getRandomScramble();
+  ss[0]=scramblers["333"].getRandomScramble().scramble_string;
  }
  else if(type=="sqrs"){	          	// square-1 (random state)
   if (initoncesq1==1) { scramblers['sq1'].initialize(null, Math); initoncesq1=0; }
@@ -1270,7 +1271,7 @@ function scrambleIt(){
   var n;
   megascramble([[["U","U'","U2"], ["D", "D'", "D2"]],["R2","L2"],["F2","B2"]],[""]);
   for(n=0;n<num;n++){ss[n]+=" / ";}
-  ss[0] += scramblers["333"].getRandomScramble();
+  ss[0] += scramblers["333"].getRandomScramble().scramble_string;
  }
  else if(type=="336"){			// 3x3x6
   megascramble([[["U","U'","U2","u","u'","u2","U u","U u'","U u2","U' u","U' u'","U' u2","U2 u","U2 u'","U2 u2","3u","3u'","3u2","U 3u","U' 3u","U2 3u","u 3u","u' 3u","u2 3u","U u 3u","U u' 3u","U u2 3u","U' u 3u","U' u' 3u","U' u2 3u","U2 u 3u","U2 u' 3u","U2 u2 3u","U 3u'","U' 3u'","U2 3u'","u 3u'","u' 3u'","u2 3u'","U u 3u'","U u' 3u'","U u2 3u'","U' u 3u'","U' u' 3u'","U' u2 3u'","U2 u 3u'","U2 u' 3u'","U2 u2 3u'","U 3u2","U' 3u2","U2 3u2","u 3u2","u' 3u2","u2 3u2","U u 3u2","U u' 3u2","U u2 3u2","U' u 3u2","U' u' 3u2","U' u2 3u2","U2 u 3u2","U2 u' 3u2","U2 u2 3u2"]],[["R2","L2","M2"]],[["F2","B2","S2"]]],[""]);
@@ -1279,7 +1280,7 @@ function scrambleIt(){
   var n;
   megascramble([[["U","U'","U2","u","u'","u2","U u","U u'","U u2","U' u","U' u'","U' u2","U2 u","U2 u'","U2 u2"], ["D","D'","D2","d","d'","d2","D d","D d'","D d2","D' d","D' d'","D' d2","D2 d","D2 d'","D2 d2"]],["R2","L2"],["F2","B2"]],[""]);
   for(n=0;n<num;n++){ss[n]+=" / ";}
-  ss[0] += scramblers["333"].getRandomScramble();
+  ss[0] += scramblers["333"].getRandomScramble().scramble_string;
  }
  else if(type=="888"){			// 8x8x8 (SiGN)
   megascramble([["U","D","u","d","3u","3d","4u"],["R","L","r","l","3r","3l","4r"],["F","B","f","b","3f","3b","4f"]],cubesuff);
@@ -1408,7 +1409,7 @@ function scrambleIt(){
   ss[0] = "<br> 2) ";
   get2x2optscramble(9);
   ss[0] += "<br> 3) ";
-  ss[0] += scramblers["333"].getRandomScramble();
+  ss[0] += scramblers["333"].getRandomScramble().scramble_string;
   ss[0] += "<br> 4) ";
   len = 40;
   megascramble([["U","D","u"],["R","L","r"],["F","B","f"]],cubesuff);;
@@ -1417,7 +1418,7 @@ function scrambleIt(){
   ss[0] = "<br> 2) ";
   get2x2optscramble(9);
   ss[0] += "<br> 3) ";
-  ss[0] += scramblers["333"].getRandomScramble();
+  ss[0] += scramblers["333"].getRandomScramble().scramble_string;
   ss[0] += "<br> 4) ";
   len = 40;
   megascramble([["U","D","u"],["R","L","r"],["F","B","f"]],cubesuff);
@@ -1429,7 +1430,7 @@ function scrambleIt(){
   ss[0] = "<br> 2) ";
   get2x2optscramble(9);
   ss[0] += "<br> 3) ";
-  ss[0] += scramblers["333"].getRandomScramble();
+  ss[0] += scramblers["333"].getRandomScramble().scramble_string;
   ss[0] += "<br> 4) ";
   len = 40;
   megascramble([["U","D","u"],["R","L","r"],["F","B","f"]],cubesuff);
@@ -1444,7 +1445,7 @@ function scrambleIt(){
   ss[0] = "<br> 2) ";
   get2x2optscramble(9);
   ss[0] += "<br> 3) ";
-  ss[0] += scramblers["333"].getRandomScramble();
+  ss[0] += scramblers["333"].getRandomScramble().scramble_string;
   ss[0] += "<br> 4) ";
   len = 40;
   megascramble([["U","D","u"],["R","L","r"],["F","B","f"]],cubesuff);
@@ -1463,7 +1464,7 @@ function scrambleIt(){
   len = 25;
   for (var i=0; i<ncubes; i++) {
    ss[0] += "<br>" + (i+1) + ") ";
-   ss[0] += scramblers["333"].getRandomScramble();
+   ss[0] += scramblers["333"].getRandomScramble().scramble_string;
   }
   len = ncubes;
  }
@@ -1554,16 +1555,16 @@ function scrambleIt(){
   megascramble([["U","D"],["R","L"],["F","B"]],["2"]);
  }
  else if(type=="edges"){		// 3x3x3 edges only
-  ss[0] = scramblers["333"].getEdgeScramble();
+  ss[0] = scramblers["333"].getEdgeScramble().scramble_string;
  }
  else if(type=="corners"){		// 3x3x3 corners only
-  ss[0] = scramblers["333"].getCornerScramble();
+  ss[0] = scramblers["333"].getCornerScramble().scramble_string;
  }
  else if(type=="ll"){			// 3x3x3 last layer
-  ss[0] = scramblers["333"].getLLScramble();
+  ss[0] = scramblers["333"].getLLScramble().scramble_string;
  }
  else if(type=="lsll2"){		// 3x3x3 last slot + last layer
-  ss[0] = scramblers["333"].getLSLLScramble();
+  ss[0] = scramblers["333"].getLSLLScramble().scramble_string;
  }
  else if(type=="lsll"){			// 3x3x3 last slot + last layer (old)
   megascramble([[["R U R'","R U2 R'","R U' R'"]],[["F' U F","F' U2 F","F' U' F"]],[["U","U2","U'"]]],[""]);
