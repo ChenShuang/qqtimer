@@ -3,8 +3,6 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>qqTimer</title>
   <script type="text/javascript" src="mersennetwister.js"></script>
-  <script type="text/javascript" src="scramble_333_edit.js"></script>
-  <script type="text/javascript" src="scramble_sq1.js"></script>
   <link rel="stylesheet" type="text/css" href="colorBoard.css">
   <script type="text/javascript" src="color.js"></script>
   <script type="text/javascript">
@@ -31,6 +29,15 @@ var highlightID;
 var sessionID=0;
 var initoncesq1 = 1;
 
+if(!Array.prototype.indexOf){
+    Array.prototype.indexOf=function(el, index){
+        var n = this.length>>>0, i = ~~index;
+        if(i < 0) i += n;
+        for(; i < n; i++) if(i in this && this[i] === el) return i;
+        return -1;
+    }
+}
+
 function $(str){return document.getElementById(str);}
 Math.random = new MersenneTwisterObject(new Date().getTime()).random;
 
@@ -45,11 +52,6 @@ window.onkeydown = function(event) {checkKey(event.keyCode); };
 window.onkeyup = function(event) {startTimer(event.keyCode); };
 
 function initialize(lookForTimes, checkQueryString) {
- if (getBrowser() == "IE") {
-  if (confirm("您正在使用IE内核的浏览器，当前版本可能无法正常运行，是否跳转至IE专用版本？")) {
-   window.location = "index_ie.htm";
-  }
- }
  loadOptBoxes();
  var query = ""; // query string for scrambles
  if (checkQueryString) {
@@ -128,8 +130,6 @@ function initialize(lookForTimes, checkQueryString) {
  
  loadList();
  getStats(true);
-
- scramblers['333'].initialize(null, Math); // hopefully this'll let IE load scramblers
 
  curTime = new Date(0);
  $('leng').value = len;
@@ -1186,7 +1186,7 @@ var minxsuff=["","2","'","2'"];
 // data for all scramblers
 var scrdata = [["===WCA PUZZLES===",[["--","blank",0]]],
  ["2x2x2",[["random state","222so",11],["optimal random state","222o",0],["3-gen","2223",25],["6-gen",2226,25]]],
- ["3x3x3",[["random state","333",0],["old style","333o",25]]],
+ ["3x3x3",[["old style","333o",25]]],
  ["4x4x4",[["SiGN","444",40],["WCA","444wca",40],["YJ (place fixed center on Urf)","444yj",40]]],
  ["5x5x5",[["SiGN","555",60],["WCA","555wca",60]]],
  ["6x6x6",[["SiGN","666si",80],["prefix","666p",80],["suffix","666s",80]]],
@@ -1200,9 +1200,7 @@ var scrdata = [["===WCA PUZZLES===",[["--","blank",0]]],
  ["1x3x3 (Floppy Cube)",[["U D L R","flp",25]]],
  ["2x3x3 (Domino)",[[" ","223",25]]],
  ["3x3x4",[[" ","334",40]]],
- ["3x3x5",[["shapeshifting","335",25]]],
  ["3x3x6",[[" ","336",40]]],
- ["3x3x7",[["shapeshifting","337",40]]],
  ["8x8x8",[["SiGN","888",120]]],
  ["9x9x9",[["SiGN","999",120]]],
  ["11x11x11",[["SiGN","111111",120]]],
@@ -1226,8 +1224,7 @@ var scrdata = [["===WCA PUZZLES===",[["--","blank",0]]],
  ["1x1x1",[["x y z","111",25]]],
  ["3x3x3 subsets",[["2-generator <R,U>","2gen",25],["2-generator <L,U>","2genl",25],
   ["Roux-generator <M,U>","roux",25],["3-generator <F,R,U>","3gen_F",25],["3-generator <R,U,L>","3gen_L",25],
-  ["3-generator <R,r,U>","RrU",25],["half turns only","half",25],["edges only","edges",0],
-  ["corners only","corners",0],["last layer","ll",0],["last slot + last layer","lsll2",0],
+  ["3-generator <R,r,U>","RrU",25],["half turns only","half",25],
   ["last slot + last layer (old)","lsll",15]]],
  ["Bandaged Cube (Bicube)",[["","bic",30]]],
  ["Bandaged Square-1 </,(1,0)>",[["twist metric","bsq",25]]],
@@ -1266,30 +1263,11 @@ function scrambleIt(){
  else if(type=="333o"){			// 3x3x3 (old style)
   megascramble([["U","D"],["R","L"],["F","B"]],cubesuff);
  }
- else if(type=="333"){		        // 3x3x3 (random state)
-  ss[0]=scramblers["333"].getRandomScramble().scramble_string;
- }
- else if(type=="sqrs"){	          	// square-1 (random state)
-  if (initoncesq1==1) { scramblers['sq1'].initialize(null, Math); initoncesq1=0; }
-  ss[0]=scramblers["sq1"].getRandomScramble().scramble;
- }
  else if(type=="334"){			// 3x3x4
   megascramble([[["U","U'","U2", "u", "u'", "u2", "U u", "U u'", "U u2", "U' u", "U' u'", "U' u2", "U2 u", "U2 u'", "U2 u2"]],[["R2","L2","M2"]],[["F2","B2","S2"]]],[""]);
  }
- else if(type=="335"){			// 3x3x5
-  var n;
-  megascramble([[["U","U'","U2"], ["D", "D'", "D2"]],["R2","L2"],["F2","B2"]],[""]);
-  for(n=0;n<num;n++){ss[n]+=" / ";}
-  ss[0] += scramblers["333"].getRandomScramble().scramble_string;
- }
  else if(type=="336"){			// 3x3x6
   megascramble([[["U","U'","U2","u","u'","u2","U u","U u'","U u2","U' u","U' u'","U' u2","U2 u","U2 u'","U2 u2","3u","3u'","3u2","U 3u","U' 3u","U2 3u","u 3u","u' 3u","u2 3u","U u 3u","U u' 3u","U u2 3u","U' u 3u","U' u' 3u","U' u2 3u","U2 u 3u","U2 u' 3u","U2 u2 3u","U 3u'","U' 3u'","U2 3u'","u 3u'","u' 3u'","u2 3u'","U u 3u'","U u' 3u'","U u2 3u'","U' u 3u'","U' u' 3u'","U' u2 3u'","U2 u 3u'","U2 u' 3u'","U2 u2 3u'","U 3u2","U' 3u2","U2 3u2","u 3u2","u' 3u2","u2 3u2","U u 3u2","U u' 3u2","U u2 3u2","U' u 3u2","U' u' 3u2","U' u2 3u2","U2 u 3u2","U2 u' 3u2","U2 u2 3u2"]],[["R2","L2","M2"]],[["F2","B2","S2"]]],[""]);
- }
- else if(type=="337"){			// 3x3x7
-  var n;
-  megascramble([[["U","U'","U2","u","u'","u2","U u","U u'","U u2","U' u","U' u'","U' u2","U2 u","U2 u'","U2 u2"], ["D","D'","D2","d","d'","d2","D d","D d'","D d2","D' d","D' d'","D' d2","D2 d","D2 d'","D2 d2"]],["R2","L2"],["F2","B2"]],[""]);
-  for(n=0;n<num;n++){ss[n]+=" / ";}
-  ss[0] += scramblers["333"].getRandomScramble().scramble_string;
  }
  else if(type=="888"){			// 8x8x8 (SiGN)
   megascramble([["U","D","u","d","3u","3d","4u"],["R","L","r","l","3r","3l","4r"],["F","B","f","b","3f","3b","4f"]],cubesuff);
@@ -1418,7 +1396,8 @@ function scrambleIt(){
   ss[0] = "<br> 2) ";
   get2x2optscramble(9);
   ss[0] += "<br> 3) ";
-  ss[0] += scramblers["333"].getRandomScramble().scramble_string;
+  len = 25;
+  megascramble([["U","D"],["R","L"],["F","B"]],cubesuff);
   ss[0] += "<br> 4) ";
   len = 40;
   megascramble([["U","D","u"],["R","L","r"],["F","B","f"]],cubesuff);;
@@ -1427,7 +1406,8 @@ function scrambleIt(){
   ss[0] = "<br> 2) ";
   get2x2optscramble(9);
   ss[0] += "<br> 3) ";
-  ss[0] += scramblers["333"].getRandomScramble().scramble_string;
+  len = 25;
+  megascramble([["U","D"],["R","L"],["F","B"]],cubesuff);
   ss[0] += "<br> 4) ";
   len = 40;
   megascramble([["U","D","u"],["R","L","r"],["F","B","f"]],cubesuff);
@@ -1439,7 +1419,8 @@ function scrambleIt(){
   ss[0] = "<br> 2) ";
   get2x2optscramble(9);
   ss[0] += "<br> 3) ";
-  ss[0] += scramblers["333"].getRandomScramble().scramble_string;
+  len = 25;
+  megascramble([["U","D"],["R","L"],["F","B"]],cubesuff);
   ss[0] += "<br> 4) ";
   len = 40;
   megascramble([["U","D","u"],["R","L","r"],["F","B","f"]],cubesuff);
@@ -1454,7 +1435,8 @@ function scrambleIt(){
   ss[0] = "<br> 2) ";
   get2x2optscramble(9);
   ss[0] += "<br> 3) ";
-  ss[0] += scramblers["333"].getRandomScramble().scramble_string;
+  len = 25;
+  megascramble([["U","D"],["R","L"],["F","B"]],cubesuff);
   ss[0] += "<br> 4) ";
   len = 40;
   megascramble([["U","D","u"],["R","L","r"],["F","B","f"]],cubesuff);
@@ -1473,7 +1455,7 @@ function scrambleIt(){
   len = 25;
   for (var i=0; i<ncubes; i++) {
    ss[0] += "<br>" + (i+1) + ") ";
-   ss[0] += scramblers["333"].getRandomScramble().scramble_string;
+   megascramble([["U","D"],["R","L"],["F","B"]],cubesuff);
   }
   len = ncubes;
  }
@@ -1562,18 +1544,6 @@ function scrambleIt(){
  }
  else if(type=="half"){			// 3x3x3 half turns
   megascramble([["U","D"],["R","L"],["F","B"]],["2"]);
- }
- else if(type=="edges"){		// 3x3x3 edges only
-  ss[0] = scramblers["333"].getEdgeScramble().scramble_string;
- }
- else if(type=="corners"){		// 3x3x3 corners only
-  ss[0] = scramblers["333"].getCornerScramble().scramble_string;
- }
- else if(type=="ll"){			// 3x3x3 last layer
-  ss[0] = scramblers["333"].getLLScramble().scramble_string;
- }
- else if(type=="lsll2"){		// 3x3x3 last slot + last layer
-  ss[0] = scramblers["333"].getLSLLScramble().scramble_string;
  }
  else if(type=="lsll"){			// 3x3x3 last slot + last layer (old)
   megascramble([[["R U R'","R U2 R'","R U' R'"]],[["F' U F","F' U2 F","F' U' F"]],[["U","U2","U'"]]],[""]);
@@ -2063,7 +2033,7 @@ function megascramble(turns, suffixes){
 	   <select id="sessbox" size="1" onchange="getSession(); loadList(); getStats(true);"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select>
       <td>
       	<a href="megadoc_cn.html" target="_blank" style="color: black;" class="a">帮助!</a>
-      	<a href="index_en.htm" target="_blank" style="color: black;" class="a">English Version</a>
+      	<a href="index.htm" target="_blank" style="color: black;" class="a">完整版</a>
       </td>
      </tr>
     </tbody></table>
@@ -2076,7 +2046,7 @@ function megascramble(turns, suffixes){
    </td>
   </tr>
   <tr>
-   <td align="center">
+   <td align="center" style="width: 53%;">
     <span id="showOpt" onclick="toggleOptions()" class="a">显示</span> 计时器选项<br>
     <span id="theTime" style="font-family: sans-serif; font-weight: bold; font-size: 2em; ">预备</span><br>
     上述成绩为: <span onclick="changeNotes(0);" class="a">无惩罚</span> <span onclick="changeNotes(2);" class="a">+2</span> <span onclick="changeNotes(1);" class="a">DNF</span> | <span onclick="comment();" class="a">添加注释</span>

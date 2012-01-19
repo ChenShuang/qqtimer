@@ -45,10 +45,9 @@ window.onkeydown = function(event) {checkKey(event.keyCode); };
 window.onkeyup = function(event) {startTimer(event.keyCode); };
 
 function initialize(lookForTimes, checkQueryString) {
+ 
  if (getBrowser() == "IE") {
-  if (confirm("您正在使用IE内核的浏览器，当前版本可能无法正常运行，是否跳转至IE专用版本？")) {
-   window.location = "index_ie.htm";
-  }
+  alert("SWITCH TO ANOTHER BROWSER INSTEAD OF IE, OR SOME SCRAMBLES WILL BE UNAVAILABLE");
  }
  loadOptBoxes();
  var query = ""; // query string for scrambles
@@ -83,7 +82,7 @@ function initialize(lookForTimes, checkQueryString) {
  timerStatus = 3;
 
  timerupdate = (a=getCookie("timerupdate"))===null ? 1 : a;
- $('toggler').innerHTML = (timerupdate==0) ? "禁用" : (timerupdate==1) ? "启用" : "仅显示到秒";
+ $('toggler').innerHTML = (timerupdate==0) ? "off" : (timerupdate==1) ? "on" : "seconds only";
  useMilli = (a=getCookie("useMilli"))===null ? 0 : a;
  $('millisec').innerHTML = (useMilli==1) ? "1\/1000 sec" : "1\/100 sec";
  var oldManualEnter = manualEnter;
@@ -98,11 +97,11 @@ function initialize(lookForTimes, checkQueryString) {
  $('lcol').value = (a=getCookie("lColor"))===null ? "blue" : a;
  $('hcol').value = (a=getCookie("hColor"))===null ? "yellow" : a;
  $('memcol').value = (a=getCookie("memColor"))===null ? "green" : a;
- $('inputTimes').innerHTML = (manualEnter==1) ? "输入" : "计时器";
+ $('inputTimes').innerHTML = (manualEnter==1) ? "typing" : "timer";
  $('theTime').innerHTML = (manualEnter==1) ?
   "<input id='timeEntry' size=12 style='font-size:100%'>"+
   " <span onclick='stopTimer(13);' class='a' style='color:"+
-  parseColor($('lcol').value)+"'>enter</span>" : "预备";
+  parseColor($('lcol').value)+"'>enter</span>" : "ready";
  timerSize = (a=getCookie("timerSize"))===null ? 2 : a;
  $('theTime').style.fontSize = timerSize + "em";
  scrambleSize = (a=getCookie("scrSize"))===null ? 16 : parseInt(a,10);
@@ -111,16 +110,16 @@ function initialize(lookForTimes, checkQueryString) {
  $('theList').style.height = Math.max(16, (timerSize * 1.5)) + "em";
  $('stats').style.height = Math.max(16, (timerSize * 1.5)) + "em";
  inspection = (a=getCookie("inspection"))===null ? 0 : a;
- $('inspec').innerHTML = (inspection==1) ? "WCA" : "无";
+ $('inspec').innerHTML = (inspection==1) ? "WCA" : "no";
  if (inspection==0) { useBld = (a=getCookie("useBld"))===null ? 0 : a; }
  else { useBld = 0; setCookie("useBld", 0); }
- $('bldmode').innerHTML = (useBld==1) ? "启用" : "禁用";
+ $('bldmode').innerHTML = (useBld==1) ? "on" : "off";
  useAvgN = (a=getCookie("useAvgN"))===null ? 0 : a;
- $('avgn').innerHTML = (useAvgN==1) ? "使用" : "不使用";
+ $('avgn').innerHTML = (useAvgN==1) ? "using" : "not using";
  useMoN = (a=getCookie("useMoN"))===null ? 0 : a;
- $('mon').innerHTML = (useMoN==1) ? "使用" : "不使用";
+ $('mon').innerHTML = (useMoN==1) ? "using" : "not using";
  useMono = (a=getCookie("useMono"))===null ? 0 : a;
- $('monospace').innerHTML = (useMono==1) ? "启用" : "禁用";
+ $('monospace').innerHTML = (useMono==1) ? "on" : "off";
  $('scramble').style.fontFamily = (useMono==1) ? "monospace" : "serif";
  $('getlast').style.color = parseColor($('lcol').value);
  type = (a=getCookie("scrType"))===null ? "333" : a;
@@ -163,7 +162,7 @@ function rescramble(scramble) {
  if (scramble) {
   setCookie("scrType", type);
   scrambleIt();
-  $('getlast').innerHTML = "上一条打乱";
+  $('getlast').innerHTML = "get last scramble";
  }
 }
 
@@ -179,13 +178,13 @@ function rescramble2() {
  setCookie("scrType", type);
 
  scrambleIt();
- $('getlast').innerHTML = "上一条打乱";
+ $('getlast').innerHTML = "get last scramble";
 }
 
 function rescramble3() {
  len = $('leng').value;
  scrambleIt();
- $('getlast').innerHTML = "上一条打乱";
+ $('getlast').innerHTML = "get last scramble";
 }
 
 function loadOptBoxes() {
@@ -198,7 +197,7 @@ function startTimer(keyCode) {
  if (timerStatus == 0 && manualEnter == 0 && keyCode == 32 && importFocus == 0) {
   timerStatus = 3;
  } else if (timerStatus == 3 && manualEnter == 0 && keyCode == 32 && (new Date()).getTime() - curTime.getTime() >= 500 && importFocus == 0) {
-  if (type=="sqrs") { $('scramble').innerHTML = "打乱公式: loading... "; }
+  if (type=="sqrs") { $('scramble').innerHTML = "scramble: loading... "; }
   if (inspection == 1) {
    timerStatus = 2;
    inspectionTime = new Date();
@@ -207,13 +206,13 @@ function startTimer(keyCode) {
    timerStatus = 4;
    memoTime = new Date();
    if (timerupdate > 0) {memoID = setInterval(updateMemo, (timerupdate==1)?10:100);}
-   else {$('theTime').innerHTML = "记忆阶段";}
+   else {$('theTime').innerHTML = "memorizing";}
   } else {
    timerStatus = 1;
    startTime = new Date();
    penalty = 0;
    if (timerupdate > 0) {timerID = setInterval(updateTimer, (timerupdate==1)?10:100);}
-   else {$('theTime').innerHTML = "计时中";}
+   else {$('theTime').innerHTML = "running";}
   }
  } else if (timerStatus == 4 && keyCode == 32) {
   timerStatus = 1;
@@ -223,7 +222,7 @@ function startTimer(keyCode) {
    clearInterval(memoID);
    timerID = setInterval(updateMemo, (timerupdate==1)?10:100);
   }
-  else {$('theTime').innerHTML = "计时中";}
+  else {$('theTime').innerHTML = "running";}
  } else if (timerStatus == 2 && keyCode == 32) {
   timerStatus = 1;
   startTime = new Date();
@@ -233,7 +232,7 @@ function startTimer(keyCode) {
   if (timerupdate > 0) {
    timerID = setInterval(updateTimer, (timerupdate==1)?10:100);
   }
-  else {$('theTime').innerHTML = "计时中";}
+  else {$('theTime').innerHTML = "running";}
  }
  if (timerStatus == 4) {
   $('theTime').style.color = $('memcol').value;  
@@ -364,14 +363,14 @@ function parseTime(s, importing) {
 }
 
 function resetTimes() {
- if (confirm("你确定要删除所有成绩?")) {
+ if (confirm("Are you sure you want to delete ALL of your times?")) {
   initialize(false, false);
  }
 }
 
 function loadList() {
  var data = [-1,[null],[null]];
- var s = "成绩列表 (<span onclick='resetTimes();' class='a'>重置</span>, <span onclick='toggleImport();' class='a'>导入</span>):<br>"
+ var s = "times (<span onclick='resetTimes();' class='a'>reset</span>, <span onclick='toggleImport();' class='a'>import</span>):<br>"
  // get the best and worst time for the highlighted average
  if (highlightStop != -1 && (highlightStop - highlightStart) > 1) {
   var mean = 0;
@@ -403,7 +402,7 @@ function loadList() {
 }
 
 function del(index) {
- if (confirm("你确定要删除 " +
+ if (confirm("Are you sure you want to delete the " +
      pretty((notes[index]==1)?-1:times[index]+1000*notes[index]) + "?")) {
   for (var i = index; i < times.length - 1; i++) {
    times[i] = times[i+1];
@@ -422,7 +421,7 @@ function del(index) {
 }
 
 function getlastscramble() {
- $('scramble').innerHTML = "打乱公式: " + scramble + "<br> 上一条打乱: " + lastscramble;
+ $('scramble').innerHTML = "scramble: " + scramble + "<br> last scramble: " + lastscramble;
  $('getlast').innerHTML = "";
 }
 
@@ -488,7 +487,7 @@ function toggleTimer() {
  stopTimer();
  timerupdate = (timerupdate + 1)%3;
  setCookie("timerupdate", timerupdate);
- $('toggler').innerHTML = (timerupdate==0) ? "禁用" : (timerupdate==1) ? "启用" : "仅显示到秒";
+ $('toggler').innerHTML = (timerupdate==0) ? "off" : (timerupdate==1) ? "on" : "seconds only";
 }
 
 function toggleMilli() {
@@ -500,19 +499,15 @@ function toggleMilli() {
 }
 
 function toggleBld() {
- useBld = 1 - useBld;
- if (useBld==1)
-  inspection=0;
+ if (inspection==0) { useBld = 1 - useBld; }
  setCookie("useBld", useBld);
- setCookie("inspection", inspection);
- $('inspec').innerHTML = (inspection==1) ? "WCA" : "无";
- $('bldmode').innerHTML = (useBld==1) ? "启用" : "禁用";
+ $('bldmode').innerHTML = (useBld==1) ? "on" : "off";
 }
 
 function toggleMono() {
  useMono = 1 - useMono;
  setCookie("useMono", useMono);
- $('monospace').innerHTML = (useMono==1) ? "启用" : "禁用";
+ $('monospace').innerHTML = (useMono==1) ? "on" : "off";
  $('scramble').style.fontFamily = (useMono==1) ? "monospace" : "serif";
  $('getlast').style.color = parseColor($('lcol').value);
 }
@@ -521,16 +516,16 @@ function toggleInput() {
  if (manualEnter == 0) stopTimer();
  manualEnter = 1 - manualEnter;
  setCookie("manualEnter", manualEnter);
- $('inputTimes').innerHTML = (manualEnter==1) ? "输入" : "计时器";
+ $('inputTimes').innerHTML = (manualEnter==1) ? "typing" : "timer";
  $('theTime').innerHTML = (manualEnter==1) ?
   "<input id='timeEntry' size=12 style='font-size:100%'>"+
   " <span onclick='stopTimer(13);' class='a' style='color:"+
-  parseColor($('lcol').value)+"'>enter</span>" : "预备";
+  parseColor($('lcol').value)+"'>enter</span>" : "ready";
 }
 
 function toggleOptions() {
  showOptions = 1 - showOptions;
- $('showOpt').innerHTML = (showOptions==1) ? "显示" : "显示";
+ $('showOpt').innerHTML = (showOptions==1) ? "hide" : "show";
  $('options').style.display = (showOptions==1) ? "" : "none"; 
 }
 
@@ -568,21 +563,21 @@ function toggleInspection() {
  if (inspection==1) { useBld = 0; }
  setCookie("useBld", useBld);
  setCookie("inspection", inspection);
- $('inspec').innerHTML = (inspection==1) ? "WCA" : "无";
- $('bldmode').innerHTML = (useBld==1) ? "启用" : "禁用";
+ $('inspec').innerHTML = (inspection==1) ? "WCA" : "no";
+ $('bldmode').innerHTML = (useBld==1) ? "on" : "off";
 }
 
 function toggleAvgN() {
  useAvgN = 1 - useAvgN;
  setCookie("useAvgN", useAvgN);
- $('avgn').innerHTML = (useAvgN==1) ? "使用" : "不使用";
+ $('avgn').innerHTML = (useAvgN==1) ? "using" : "not using";
  getStats(true);
 }
 
 function toggleMoN() {
  useMoN = 1 - useMoN;
  setCookie("useMoN", useMoN);
- $('mon').innerHTML = (useMoN==1) ? "使用" : "不使用";
+ $('mon').innerHTML = (useMoN==1) ? "using" : "not using";
  getStats(true);
 }
 
@@ -826,28 +821,28 @@ function getStats(recalc) {
   sessionmean = (numdnf == times.length) ? -1 : (sessionsum / (times.length - numdnf));
  }
 
- var s = "统计: (<span id='hidestats' onclick='toggleStatView()' class='a'>" + (viewstats?"显示":"显示") + "</span>)<br>";
- s += "还原个数: " + (times.length - numdnf) + "/" + times.length;
+ var s = "stats: (<span id='hidestats' onclick='toggleStatView()' class='a'>" + (viewstats?"hide":"show") + "</span>)<br>";
+ s += "number of times: " + (times.length - numdnf) + "/" + times.length;
  if (viewstats) {
-  s += "<br>最好时间: <span onclick='setHighlight(" + bestTimeIndex + ",1,0);loadList();' class='a'>";
-  s += pretty(bestTime) + "<\/span><br>最差时间: <span onclick='setHighlight(" + worstTimeIndex;
+  s += "<br>best time: <span onclick='setHighlight(" + bestTimeIndex + ",1,0);loadList();' class='a'>";
+  s += pretty(bestTime) + "<\/span><br>worst time: <span onclick='setHighlight(" + worstTimeIndex;
   s += ",1,1);loadList();' class='a'>" + pretty(worstTime) + "<\/span><br>";
   if (useMoN==1) {
    if (times.length >= moSize) {
-    s += "<br>当前" + moSize + "次平均: <span onclick='setHighlight(" + (times.length - moSize);
+    s += "<br>current mo" + moSize + ": <span onclick='setHighlight(" + (times.length - moSize);
     s += "," + moSize + "," + moSize + "2);loadList();' class='a'>" + pretty(lastMo[0]);
     s += "<\/span> (&sigma; = " + trim(lastMo[1], 2) + ")<br>";
-    s += "最好" + moSize + "次平均: <span onclick='setHighlight(" + bestMoIndex;
+    s += "best mo" + moSize + ": <span onclick='setHighlight(" + bestMoIndex;
     s += "," + moSize + "," + moSize + "3);loadList();' class='a'>" + pretty(bestMo[0]);
     s += "<\/span> (&sigma; = " + trim(bestMo[1], 2) + ")<br>";
    }
   }
   for (var j = 0; j < avgSizes2.length; j++) {
    if (times.length >= avgSizes2[j]) {
-    s += "<br>当前" + avgSizes2[j] + "次去尾平均: <span onclick='setHighlight(" + (times.length - avgSizes2[j]);
+    s += "<br>current avg" + avgSizes2[j] + ": <span onclick='setHighlight(" + (times.length - avgSizes2[j]);
     s += "," + avgSizes2[j] + "," + avgSizes2[j] + "1);loadList();' class='a'>" + pretty(lastAvg[j][0]);
     s += "<\/span> (&sigma; = " + trim(lastAvg[j][1], 2) + ")<br>";
-    s += "最好" + avgSizes2[j] + "次去尾平均: <span onclick='setHighlight(" + bestAvgIndex[j];
+    s += "best avg" + avgSizes2[j] + ": <span onclick='setHighlight(" + bestAvgIndex[j];
     s += "," + avgSizes2[j] + "," + avgSizes2[j] + "0);loadList();' class='a'>" + pretty(bestAvg[j][0]);
     s += "<\/span> (&sigma; = " + trim(bestAvg[j][1], 2) + ")<br>";
    }
@@ -1614,7 +1609,7 @@ function scrambleIt(){
   megascramble([["OMG"],["WOW"],["WTF"],[["WOO-HOO","WOO-HOO","MATYAS","YES","YES","YAY","YEEEEEEEEEEEES"]],["HAHA"],["XD"],[":D"],["LOL"]],["","","","!!!"]);
  }
  scramble = ss[0];
- $('scramble').innerHTML = "打乱公式: " + scramble + "&nbsp;";
+ $('scramble').innerHTML = "scramble: " + scramble + "&nbsp;";
 }
 
 // Clock functions.
@@ -2051,35 +2046,33 @@ function megascramble(turns, suffixes){
     <table cellpadding="2" cellspacing="0" width="100%">
      <tbody><tr>
       <td>
-       <span class="hide"><font face="Arial" size="3">打乱类型:</font></span>
+       <span class="hide"><font face="Arial" size="3">Scramble type:</font></span>
        <select id="optbox" size="1" onchange="rescramble(true);"></select>
        <select id="optbox2" size="1" onchange="rescramble2();"></select>
       </td>
       <td>
-       <span class="hide"><font face="Arial" size="3">打乱长度:</font></span>
+       <span class="hide"><font face="Arial" size="3">Scramble length:</font></span>
        <input value="25" id="leng" size="3" maxlength="3" onchange="rescramble3();">
       </td>
 	  <td><span class="hide"><font face="Arial" size="3">Session:</font></span>
 	   <select id="sessbox" size="1" onchange="getSession(); loadList(); getStats(true);"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select>
-      <td>
-      	<a href="megadoc_cn.html" target="_blank" style="color: black;" class="a">帮助!</a>
-      	<a href="index_en.htm" target="_blank" style="color: black;" class="a">English Version</a>
-      </td>
+      <td>	
+      	<a href="megadoc.html" target="_blank" style="color: black;" class="a">Help!</a></td>
      </tr>
     </tbody></table>
    </td>
   </tr>
   <tr>
    <td colspan="3">
-    <span id="scramble" style="font-size: 16px;">&nbsp; </span><span id="getlast" onclick="getlastscramble()" class="a">上一条打乱</span>
+    <span id="scramble" style="font-size: 16px;">&nbsp; </span><span id="getlast" onclick="getlastscramble()" class="a">get last scramble</span>
     <span id="debug"></span>
    </td>
   </tr>
   <tr>
    <td align="center">
-    <span id="showOpt" onclick="toggleOptions()" class="a">显示</span> 计时器选项<br>
-    <span id="theTime" style="font-family: sans-serif; font-weight: bold; font-size: 2em; ">预备</span><br>
-    上述成绩为: <span onclick="changeNotes(0);" class="a">无惩罚</span> <span onclick="changeNotes(2);" class="a">+2</span> <span onclick="changeNotes(1);" class="a">DNF</span> | <span onclick="comment();" class="a">添加注释</span>
+    <span id="showOpt" onclick="toggleOptions()" class="a">show</span> timer options<br>
+    <span id="theTime" style="font-family: sans-serif; font-weight: bold; font-size: 2em; ">ready</span><br>
+    that time was: <span onclick="changeNotes(0);" class="a">no penalty</span> <span onclick="changeNotes(2);" class="a">+2</span> <span onclick="changeNotes(1);" class="a">DNF</span> | <span onclick="comment();" class="a">leave comment</span>
    </td>
    <td style="width: 15em;">
     <div id="theList" style="overflow-y: auto; height: 16em;"></div>
@@ -2090,26 +2083,26 @@ function megascramble(turns, suffixes){
   </tr>
   <tr id="options" style="display: none;"><td colspan="3">
    <table width="100%"><tbody><tr><td align="left">
-    计时器更新方式为<span id="toggler" onclick="toggleTimer()" class="a">on</span><br>
-    计时器精度为<span id="millisec" onclick="toggleMilli()" class="a">1/100 sec</span><br>
-    盲拧模式为<span id="bldmode" onclick="toggleBld()" class="a">off</span><br>
-    输入时间通过<span id="inputTimes" onclick="toggleInput()" class="a">timer</span><br>
-    <span onclick="increaseSize()" class="a">增大</span>/<span onclick="decreaseSize()" class="a">减小</span> 计时器尺寸<br>
-    <span onclick="increaseScrambleSize()" class="a">增大</span>/<span onclick="decreaseScrambleSize()" class="a">减小</span> 打乱尺寸<br>
-    使用 <span id="inspec" onclick="toggleInspection()" class="a">no</span> 观察<br>
+    timer updating is <span id="toggler" onclick="toggleTimer()" class="a">on</span><br>
+    timer precision is <span id="millisec" onclick="toggleMilli()" class="a">1/100 sec</span><br>
+    bld mode is <span id="bldmode" onclick="toggleBld()" class="a">off</span><br>
+    entering in times with <span id="inputTimes" onclick="toggleInput()" class="a">timer</span><br>
+    <span onclick="increaseSize()" class="a">increase</span>/<span onclick="decreaseSize()" class="a">decrease</span> timer size<br>
+    <span onclick="increaseScrambleSize()" class="a">increase</span>/<span onclick="decreaseScrambleSize()" class="a">decrease</span> scramble size<br>
+    using <span id="inspec" onclick="toggleInspection()" class="a">no</span> inspection<br>
     <span id="avgn" onclick="toggleAvgN()" class="a">not using</span> average of <input id="avglen" value="50" size="4" maxlength="4" onchange="changeAvgN()">&nbsp;<br>
     <span id="mon" onclick="toggleMoN()" class="a">not using</span> mean of <input id="molen" value="3" size="4" maxlength="4" onchange="changeMoN()">&nbsp;<br>
     style: <span onclick="setCookie(&#39;style&#39;,0);window.location.reload();" class="a">Gottlieb</span> |
            <span onclick="setCookie(&#39;style&#39;,1);window.location.reload();" class="a">Tamanas</span>
    </td><td align="right">
-    等宽字体打乱 <span id="monospace" onclick="toggleMono()" class="a">off</span><br>
-    <span id="tcolspan" onClick="colorSelect(event, $('tcol'))" class="a">标题栏颜色</span> : #<input id="tcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
-    <span id="bcolspan" onClick="colorSelect(event, $('bcol'))" class="a">背景颜色</span> : #<input id="bcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
-    <span id="fcolspan" onClick="colorSelect(event, $('fcol'))" class="a">文字颜色</span> : #<input id="fcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
-    <span id="lcolspan" onClick="colorSelect(event, $('lcol'))" class="a">链接颜色</span> : #<input id="lcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
-    <span id="hcolspan" onClick="colorSelect(event, $('hcol'))" class="a">高亮颜色</span> : #<input id="hcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
-    <span id="memcolspan" onClick="colorSelect(event, $('memcol'))" class="a">记忆阶段颜色</span> : #<input id="memcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
-    <span class="a" onclick="resetColors()">重置</span> 颜色为默认值<br>
+    monospace scrambles are <span id="monospace" onclick="toggleMono()" class="a">off</span><br>
+    <span id="tcolspan" onClick="colorSelect(event, $('tcol'))" class="a">top bar color</span> : #<input id="tcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
+    <span id="bcolspan" onClick="colorSelect(event, $('bcol'))" class="a">background color</span> : #<input id="bcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
+    <span id="fcolspan" onClick="colorSelect(event, $('fcol'))" class="a">text color</span> : #<input id="fcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
+    <span id="lcolspan" onClick="colorSelect(event, $('lcol'))" class="a">link color</span> : #<input id="lcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
+    <span id="hcolspan" onClick="colorSelect(event, $('hcol'))" class="a">highlight color</span> : #<input id="hcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
+    <span id="memcolspan" onClick="colorSelect(event, $('memcol'))" class="a">memorization colour</span> : #<input id="memcol" value="00ff00" size="6" maxlength="6" onchange="changeColor()"><br>
+    <span class="a" onclick="resetColors()">reset</span> colors to default<br>
    </td></tr></tbody></table>
   </td></tr>
   <tr id="avgdata" style="display: none; ">
