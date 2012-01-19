@@ -2043,7 +2043,7 @@ function megascramble(turns, suffixes){
  </script>
 
 </head>
-<body onkeydown=checkKey(event.keyCode); onkeyup=startTimer(event.keyCode); onload="initialize(true, true);">
+<body onkeydown=checkKey(event.keyCode); onkeyup=startTimer(event.keyCode); ontouchstart=checkKey(0); ontouchend=startTimer(0); onload="initialize(true, true);">
  <div id="container">
  <table border="1" cellpadding="5" cellspacing="0" width="100%">
   <tbody><tr>
@@ -2063,6 +2063,7 @@ function megascramble(turns, suffixes){
 	   <select id="sessbox" size="1" onchange="getSession(); loadList(); getStats(true);"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select>
       <td>
       	<a href="megadoc_cn.html" target="_blank" style="color: black;" class="a">帮助!</a>
+      	<a href="index_ie.htm" target="_blank" style="color: black;" class="a">切换到精简版</a>
       	<a href="index_en.htm" target="_blank" style="color: black;" class="a">English Version</a>
       </td>
      </tr>
@@ -2078,7 +2079,7 @@ function megascramble(turns, suffixes){
   <tr>
    <td align="center">
     <span id="showOpt" onclick="toggleOptions()" class="a">显示</span> 计时器选项<br>
-    <span id="theTime" style="font-family: sans-serif; font-weight: bold; font-size: 2em; ">预备</span><br>
+    <span id="theTime" ontouchend=startTimer(32); ontouchstart=checkKey(32); style="font-family: sans-serif; font-weight: bold; font-size: 2em; ">预备</span><br>
     上述成绩为: <span onclick="changeNotes(0);" class="a">无惩罚</span> <span onclick="changeNotes(2);" class="a">+2</span> <span onclick="changeNotes(1);" class="a">DNF</span> | <span onclick="comment();" class="a">添加注释</span>
    </td>
    <td style="width: 15em;">
