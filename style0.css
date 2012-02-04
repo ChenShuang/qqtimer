@@ -1,3 +1,13 @@
+@font-face {  
+	font-family: lcd;
+	src: 	local('Digiface Regular'), 
+			url("Digiface+Regular.ttf") format("truetype");  
+}
+#theTime {
+	font-family: lcd;
+	position: relative;
+	text-align: center;
+}
 .a {
  color: blue;
  text-decoration: underline;
